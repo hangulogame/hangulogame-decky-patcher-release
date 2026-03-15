@@ -1,0 +1,75 @@
+name: Release Plugin
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v5
+        with:
+          repository: hangulogame/hangulo-decky-patcher
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          path: patcher
+
+      - name: Read version from package.json
+        id: version
+        run: echo "ver=$(node -p "require('./patcher/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install frontend dependencies
+        run: cd patcher && pnpm install --no-frozen-lockfile
+
+      - name: Build frontend
+        run: cd patcher && pnpm run build
+
+      - name: Install Python dependencies
+        run: |
+          pip install --target patcher/py_modules -r patcher/py_modules/requirements.txt
+          # mega.py pins tenacity 5.x which uses removed asyncio.coroutine on Python 3.12+
+          pip install --target patcher/py_modules tenacity --upgrade
+          # Remove packages that shadow Python stdlib (pathlib, etc.)
+          rm -f patcher/py_modules/pathlib.py
+          rm -rf patcher/py_modules/pathlib-*.dist-info
+          rm -rf patcher/py_modules/tenacity-5.*.dist-info
+
+      - name: Package plugin zip
+        run: |
+          PLUGIN_NAME="Hangulogame Patcher"
+          mkdir -p "$PLUGIN_NAME/dist" "$PLUGIN_NAME/defaults" "$PLUGIN_NAME/py_modules" "$PLUGIN_NAME/bin"
+          cp patcher/plugin.json "$PLUGIN_NAME/"
+          cp patcher/package.json "$PLUGIN_NAME/"
+          cp patcher/main.py "$PLUGIN_NAME/"
+          cp patcher/dist/* "$PLUGIN_NAME/dist/"
+          cp patcher/defaults/config.json "$PLUGIN_NAME/defaults/"
+          cp -r patcher/bin/* "$PLUGIN_NAME/bin/"
+          cp -r patcher/py_modules/* "$PLUGIN_NAME/py_modules/"
+          find "$PLUGIN_NAME" -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+          zip -r hangulo-patcher.zip "$PLUGIN_NAME"
+          echo "Plugin zip size: $(du -h hangulo-patcher.zip | cut -f1)"
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.ver }}
+          name: "Hangulogame Patcher v${{ steps.version.outputs.ver }}"
+          files: hangulo-patcher.zip
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

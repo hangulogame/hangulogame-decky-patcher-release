@@ -1,0 +1,42 @@
+name: Release patches-meta.json
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v5
+        with:
+          repository: hangulogame/hangulo-decky-patcher
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          path: patcher
+
+      - name: Checkout hangulo-db
+        uses: actions/checkout@v5
+        with:
+          repository: hangulogame/hangulo-db
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          path: hangulo-db
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Generate patches-meta.json
+        run: python patcher/tools/generate_meta.py hangulo-db/hangulogame.sqlite patches-meta.json
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: meta-latest
+          name: "Patches Metadata (latest)"
+          files: patches-meta.json
+          make_latest: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
