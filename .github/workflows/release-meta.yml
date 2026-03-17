@@ -31,11 +31,15 @@ jobs:
       - name: Generate patches-meta.json
         run: python patcher/tools/generate_meta.py hangulo-db/hangulogame.sqlite patches-meta.json
 
+      - name: Read meta version
+        id: meta
+        run: echo "ver=$(python -c "import json; print(json.load(open('patches-meta.json'))['version'])")" >> "$GITHUB_OUTPUT"
+
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: meta-latest
-          name: "Patches Metadata (latest)"
+          name: "Patches Metadata (${{ steps.meta.outputs.ver }})"
           files: patches-meta.json
           make_latest: false
         env:
