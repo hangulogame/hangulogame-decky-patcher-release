@@ -68,7 +68,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.ver }}
-          name: "Hangulogame Patcher v${{ steps.version.outputs.ver }}"
+          name: "Hangulogame Decky Patcher v${{ steps.version.outputs.ver }}"
           files: hangulo-patcher.zip
           make_latest: true
         env:
