@@ -33,7 +33,7 @@
 
 ### 플러그인 다운로드
 
-[Releases](../../releases) 페이지에서 최신 버전의 **hangulo-patcher.zip**을 다운로드합니다.
+[Releases](https://github.com/hangulogame/hangulogame-decky-patcher-release/releases/latest) 페이지에서 최신 버전의 **hangulo-patcher.zip**을 다운로드합니다.
 
 ### 플러그인 설치 (개발자 모드)
 
