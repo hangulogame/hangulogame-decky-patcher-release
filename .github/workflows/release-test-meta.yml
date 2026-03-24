@@ -1,0 +1,50 @@
+name: Release test-patches-meta.json
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout private repo
+        uses: actions/checkout@v5
+        with:
+          repository: hangulogame/hangulo-decky-patcher
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          path: patcher
+
+      - name: Checkout hangulo-db
+        uses: actions/checkout@v5
+        with:
+          repository: hangulogame/hangulo-db
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          path: hangulo-db
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+
+      - name: Generate test-patches-meta.json (all statuses)
+        run: python patcher/tools/generate_meta.py hangulo-db/hangulogame.sqlite test-patches-meta.json --all
+
+      - name: Read meta version
+        id: meta
+        run: |
+          VER=$(python -c "import json; print(json.load(open('test-patches-meta.json'))['version'])")
+          COUNT=$(python -c "import json; print(len(json.load(open('test-patches-meta.json'))['patches']))")
+          echo "ver=$VER" >> "$GITHUB_OUTPUT"
+          echo "::notice::test-patches-meta.json version: $VER ($COUNT patches)"
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: test-meta-latest
+          name: "Test Patches Metadata (${{ steps.meta.outputs.ver }})"
+          files: test-patches-meta.json
+          make_latest: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
