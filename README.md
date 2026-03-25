@@ -31,32 +31,28 @@
 - [Decky Loader](https://decky.xyz/) 설치 완료
 - 인터넷 연결
 
-### 플러그인 다운로드
+### 방법 1: 원클릭 설치 (권장)
 
-[Releases](https://github.com/hangulogame/hangulogame-decky-patcher-release/releases/latest) 페이지에서 최신 버전의 **hangulo-patcher.zip**을 다운로드합니다.
+1. [Releases](https://github.com/hangulogame/hangulogame-decky-patcher-release/releases/latest) 페이지에서 **HangulogamePatcher.desktop** 파일을 다운로드합니다
+2. 스팀덱을 **데스크톱 모드**로 전환합니다
+3. 다운로드한 **HangulogamePatcher.desktop** 파일을 더블클릭합니다
+4. 비밀번호 입력 창이 나타나면 비밀번호를 입력합니다
+5. 자동으로 플러그인이 설치되고 완료 알림이 표시됩니다
+6. 게임 모드로 돌아가면 Quick Access 메뉴에 **한글로게임 Patcher**가 나타납니다
 
-### 플러그인 설치 (개발자 모드)
+> **참고**: 이 방법으로 설치하면 이후 플러그인 내에서 자동 업데이트가 가능합니다.
+
+### 방법 2: 개발자 모드로 설치
 
 Decky Loader의 개발자 모드를 통해 zip 파일로 직접 설치합니다.
 
-#### 1. 개발자 모드 활성화
+1. [Releases](https://github.com/hangulogame/hangulogame-decky-patcher-release/releases/latest) 페이지에서 **hangulo-patcher.zip**을 다운로드합니다
+2. 스팀덱 **게임 모드**에서 **Quick Access 메뉴** (···버튼) → **Decky** 탭을 엽니다
+3. 우측 상단의 **설정**(톱니바퀴) → **Developer** → **개발자 모드** 켜기
+4. **Install Plugin from ZIP** 버튼 → 다운로드한 zip 파일 선택 → 확인
+5. 설치가 완료되면 Quick Access 메뉴에 **한글로게임 Patcher**가 나타납니다
 
-1. 스팀덱을 **게임 모드**로 부팅합니다
-2. **Quick Access 메뉴** (···버튼) → **Decky** 탭을 엽니다
-3. 우측 상단의 **설정**(톱니바퀴) 아이콘을 누릅니다
-4. **Developer** 항목에서 **개발자 모드**를 **켜기**로 변경합니다
-
-#### 2. 플러그인 zip 설치
-
-1. Decky 설정 화면에서 개발자 모드를 활성화하면 나타나는 **Install Plugin from ZIP** 버튼을 누릅니다
-2. 다운로드한 **hangulo-patcher.zip** 파일을 선택합니다
-3. **확인**을 눌러 설치를 진행합니다
-4. 설치가 완료되면 Quick Access 메뉴에 **한글로게임 Patcher**가 나타납니다
-
-> **참고**: zip 파일을 스팀덱으로 전송하는 방법
-> - **데스크톱 모드**: 브라우저에서 직접 다운로드
-> - **USB**: USB 드라이브에 zip을 복사 후 스팀덱에 연결
-> - **SSH/SCP**: `scp hangulo-patcher.zip deck@<스팀덱IP>:~/Downloads/`
+> **참고**: 이 방법으로 설치 시 자동 업데이트가 동작하지 않을 수 있습니다. 자동 업데이트를 사용하려면 방법 1로 재설치하세요.
 
 ## 사용 방법
 
