@@ -36,7 +36,7 @@
 1. 스팀덱을 **데스크톱 모드**로 전환합니다
 2. 아래 버튼을 클릭하여 설치 파일을 다운로드합니다
 
-   [![다운로드](https://img.shields.io/badge/📥_HangulogamePatcher.desktop-다운로드-blue?style=for-the-badge)](https://github.com/hangulogame/hangulogame-decky-patcher-release/releases/latest/download/HangulogamePatcher.desktop)
+   [![다운로드](https://img.shields.io/badge/📥_HangulogamePatcher.desktop-다운로드-blue?style=for-the-badge)](https://raw.githubusercontent.com/hangulogame/hangulogame-decky-patcher-release/main/HangulogamePatcher.desktop)
 3. 다운로드한 **HangulogamePatcher.desktop** 파일을 더블클릭합니다
 4. 비밀번호 입력 창이 나타나면 비밀번호를 입력합니다
 5. 자동으로 플러그인이 설치되고 완료 알림이 표시됩니다
