@@ -10,6 +10,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout release repo
+        uses: actions/checkout@v5
+
       - name: Checkout private repo
         uses: actions/checkout@v5
         with:
@@ -69,7 +72,9 @@ jobs:
         with:
           tag_name: v${{ steps.version.outputs.ver }}
           name: "Hangulogame Decky Patcher v${{ steps.version.outputs.ver }}"
-          files: hangulo-patcher.zip
+          files: |
+            hangulo-patcher.zip
+            HangulogamePatcher.desktop
           make_latest: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
