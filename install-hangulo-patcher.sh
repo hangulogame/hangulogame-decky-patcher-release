@@ -1,65 +1,76 @@
 #!/bin/bash
 # Hangulogame Patcher - Decky 플러그인 설치/업데이트 스크립트
-set -e
 
 REPO_URL="https://github.com/hangulogame/hangulogame-decky-patcher-release/releases/latest/download/hangulo-patcher.zip"
 PLUGIN_NAME="Hangulogame Patcher"
 PLUGIN_DIR="$HOME/homebrew/plugins/$PLUGIN_NAME"
+LOG="/tmp/hangulo-install.log"
 
-echo "=== $PLUGIN_NAME 설치 ==="
+# 로그 초기화
+echo "=== $PLUGIN_NAME 설치 시작 ===" > "$LOG"
+
+# 에러 표시 함수
+show_error() {
+    zenity --error --title="$PLUGIN_NAME" --text="$1" --width=300 2>/dev/null
+    exit 1
+}
 
 # Decky Loader 확인
 if [ ! -d "$HOME/homebrew/plugins" ]; then
-    echo "Error: Decky Loader가 설치되어 있지 않습니다."
-    echo "먼저 Decky Loader를 설치해주세요."
-    exit 1
+    show_error "Decky Loader가 설치되어 있지 않습니다.\n먼저 Decky Loader를 설치해주세요."
 fi
 
-# 비밀번호 입력 (zenity가 있으면 GUI, 없으면 터미널)
-if command -v zenity &> /dev/null; then
-    PASSWORD=$(zenity --password --title="$PLUGIN_NAME 설치" --text="설치를 위해 비밀번호를 입력해주세요." 2>/dev/null)
-    if [ -z "$PASSWORD" ]; then
-        echo "취소됨."
-        exit 1
-    fi
-else
-    read -s -p "비밀번호: " PASSWORD
-    echo ""
+# 비밀번호 입력
+PASSWORD=$(zenity --password --title="$PLUGIN_NAME 설치" --text="설치를 위해 비밀번호를 입력해주세요." 2>/dev/null)
+if [ -z "$PASSWORD" ]; then
+    exit 0
 fi
 
 # sudo 검증
 if ! echo "$PASSWORD" | sudo -S true 2>/dev/null; then
-    echo "Error: 비밀번호가 올바르지 않습니다."
-    exit 1
+    show_error "비밀번호가 올바르지 않습니다."
 fi
 
-# 기존 플러그인 삭제
-if [ -d "$PLUGIN_DIR" ]; then
-    echo "기존 플러그인 삭제 중..."
-    echo "$PASSWORD" | sudo -S rm -rf "$PLUGIN_DIR"
-fi
+# 설치 진행 (zenity progress)
+(
+    echo "10"
+    echo "# 기존 플러그인 정리 중..."
+    if [ -d "$PLUGIN_DIR" ]; then
+        echo "$PASSWORD" | sudo -S rm -rf "$PLUGIN_DIR" >> "$LOG" 2>&1
+    fi
 
-# 디렉토리 생성 + 소유권 설정
-echo "디렉토리 생성 중..."
-echo "$PASSWORD" | sudo -S mkdir -p "$PLUGIN_DIR"
-echo "$PASSWORD" | sudo -S chown -R "$(whoami):$(whoami)" "$PLUGIN_DIR"
+    echo "20"
+    echo "# 디렉토리 생성 중..."
+    echo "$PASSWORD" | sudo -S mkdir -p "$PLUGIN_DIR" >> "$LOG" 2>&1
+    echo "$PASSWORD" | sudo -S chown -R "$(whoami):$(whoami)" "$PLUGIN_DIR" >> "$LOG" 2>&1
 
-# 다운로드 + 설치
-echo "다운로드 중..."
-curl -sL "$REPO_URL" -o /tmp/hangulo-patcher.zip
-unzip -o /tmp/hangulo-patcher.zip -d /tmp/hangulo-install/ > /dev/null
-cp -r "/tmp/hangulo-install/$PLUGIN_NAME/"* "$PLUGIN_DIR/"
-rm -rf /tmp/hangulo-patcher.zip /tmp/hangulo-install
+    echo "40"
+    echo "# 다운로드 중..."
+    curl -sL "$REPO_URL" -o /tmp/hangulo-patcher.zip >> "$LOG" 2>&1
+    if [ ! -f /tmp/hangulo-patcher.zip ]; then
+        echo "# 다운로드 실패"
+        echo "100"
+        exit 1
+    fi
 
-# 쓰기 권한 설정
-chmod -R u+rw "$PLUGIN_DIR"
+    echo "70"
+    echo "# 설치 중..."
+    unzip -o /tmp/hangulo-patcher.zip -d /tmp/hangulo-install/ >> "$LOG" 2>&1
+    cp -r "/tmp/hangulo-install/$PLUGIN_NAME/"* "$PLUGIN_DIR/" >> "$LOG" 2>&1
+    rm -rf /tmp/hangulo-patcher.zip /tmp/hangulo-install
+    chmod -R u+rw "$PLUGIN_DIR"
 
-# plugin_loader 재시작
-echo "플러그인 로더 재시작 중..."
-echo "$PASSWORD" | sudo -S systemctl restart plugin_loader.service
+    echo "90"
+    echo "# 플러그인 로더 재시작 중..."
+    echo "$PASSWORD" | sudo -S systemctl restart plugin_loader.service >> "$LOG" 2>&1
 
-echo "=== 설치 완료! ==="
+    echo "100"
+    echo "# 완료!"
+) | zenity --progress --title="$PLUGIN_NAME 설치" --text="설치 준비 중..." --percentage=0 --auto-close --width=400 2>/dev/null
 
-if command -v zenity &> /dev/null; then
-    zenity --info --title="$PLUGIN_NAME" --text="설치가 완료되었습니다!\nSteam의 Quick Access 메뉴에서 확인하세요." --width=300 2>/dev/null
+# 결과 확인
+if [ -d "$PLUGIN_DIR" ] && [ -f "$PLUGIN_DIR/plugin.json" ]; then
+    zenity --info --title="$PLUGIN_NAME" --text="설치가 완료되었습니다!\n\n게임 모드로 돌아가면\nQuick Access 메뉴에서 확인할 수 있습니다." --width=300 2>/dev/null
+else
+    zenity --error --title="$PLUGIN_NAME" --text="설치에 실패했습니다.\n로그: $LOG" --width=300 2>/dev/null
 fi
