@@ -62,17 +62,13 @@ fi
     rm -rf /tmp/hangulo-patcher.zip /tmp/hangulo-install
     chmod -R u+rw "$PLUGIN_DIR"
 
-    echo "90"
-    echo "# 플러그인 로더 재시작 중..."
-    echo "$PASSWORD" | sudo -S systemctl restart plugin_loader.service >> "$LOG" 2>&1
-
     echo "100"
     echo "# 완료!"
 ) | zenity --progress --title="$PLUGIN_NAME 설치" --text="설치 준비 중..." --percentage=0 --auto-close --width=400 2>/dev/null
 
 # 결과 확인
 if [ -d "$PLUGIN_DIR" ] && [ -f "$PLUGIN_DIR/plugin.json" ]; then
-    zenity --info --title="$PLUGIN_NAME" --text="설치가 완료되었습니다!\n\n게임 모드로 돌아가면\nQuick Access 메뉴에서 확인할 수 있습니다." --width=300 2>/dev/null
+    zenity --info --title="$PLUGIN_NAME" --text="설치가 완료되었습니다!\n\n게임 모드로 전환하면\nQuick Access 메뉴에서 사용할 수 있습니다." --width=300 2>/dev/null
 else
     zenity --error --title="$PLUGIN_NAME" --text="설치에 실패했습니다.\n로그: $LOG" --width=300 2>/dev/null
 fi
