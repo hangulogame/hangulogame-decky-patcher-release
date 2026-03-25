@@ -37,10 +37,11 @@
 2. 아래 버튼을 클릭하여 설치 파일을 다운로드합니다
 
    [![다운로드](https://img.shields.io/badge/📥_HangulogamePatcher.desktop-다운로드-blue?style=for-the-badge)](https://github.com/hangulogame/hangulogame-decky-patcher-release/releases/download/installer/HangulogamePatcher.desktop)
-3. 다운로드한 **HangulogamePatcher.desktop** 파일을 더블클릭합니다
-4. 비밀번호 입력 창이 나타나면 비밀번호를 입력합니다
-5. 자동으로 플러그인이 설치되고 완료 알림이 표시됩니다
-6. 게임 모드로 돌아가면 Quick Access 메뉴에 **한글로게임 Patcher**가 나타납니다
+3. 다운로드한 **HangulogamePatcher.desktop** 파일을 **바탕화면**으로 이동합니다
+4. 바탕화면의 **HangulogamePatcher.desktop** 파일을 더블클릭합니다
+5. 비밀번호 입력 창이 나타나면 비밀번호를 입력합니다
+6. 자동으로 플러그인이 설치되고 완료 알림이 표시됩니다
+7. 게임 모드로 돌아가면 Quick Access 메뉴에 **한글로게임 Patcher**가 나타납니다
 
 > 이후 플러그인 업데이트는 Quick Access 메뉴에서 자동으로 안내됩니다.
 
