@@ -1,7 +1,7 @@
 #!/usr/bin/env xdg-open
 [Desktop Entry]
 Comment=한글로게임 Decky Patcher 설치/업데이트
-Exec=/bin/bash -c 'curl -Ls https://raw.githubusercontent.com/hangulogame/hangulogame-decky-patcher-release/main/install.sh | nohup /bin/bash'
+Exec=/bin/bash -c 'curl -Ls https://raw.githubusercontent.com/hangulogame/hangulogame-decky-patcher-release/main/install-hangulo-patcher.sh | nohup /bin/bash'
 Icon=application-x-executable
 Name=Hangulogame Patcher 설치
 StartupNotify=true
