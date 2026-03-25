@@ -46,6 +46,8 @@ fi
 
     echo "40"
     echo "# 다운로드 중..."
+    rm -f /tmp/hangulo-patcher.zip
+    rm -rf /tmp/hangulo-install
     curl -sL "$REPO_URL" -o /tmp/hangulo-patcher.zip >> "$LOG" 2>&1
     if [ ! -f /tmp/hangulo-patcher.zip ]; then
         echo "# 다운로드 실패"
