@@ -61,6 +61,7 @@ fi
     cp -r "/tmp/hangulo-install/$PLUGIN_NAME/"* "$PLUGIN_DIR/" >> "$LOG" 2>&1
     rm -rf /tmp/hangulo-patcher.zip /tmp/hangulo-install
     chmod -R u+rw "$PLUGIN_DIR"
+    chmod +x "$PLUGIN_DIR/bin/"* 2>/dev/null
 
     echo "100"
     echo "# 완료!"
