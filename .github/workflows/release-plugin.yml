@@ -61,6 +61,7 @@ jobs:
           cp -r patcher/bin/* "$PLUGIN_NAME/bin/"
           cp -r patcher/py_modules/* "$PLUGIN_NAME/py_modules/"
           find "$PLUGIN_NAME" -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+          chmod +x "$PLUGIN_NAME/bin/"*
           zip -r hangulo-patcher.zip "$PLUGIN_NAME"
           echo "Plugin zip size: $(du -h hangulo-patcher.zip | cut -f1)"
 
